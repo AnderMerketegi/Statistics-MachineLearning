@@ -1,4 +1,4 @@
-# Statistics-MachineLearning
+# Shiny for Python - Measuring Sensibility of Central Tendency Measures to Outliers
 
 In order to run the Shiny app, the first step is to install all the dependencies.
 
