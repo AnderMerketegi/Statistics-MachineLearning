@@ -1,15 +1,13 @@
 from shiny import App, reactive, render, ui
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
-import session_info
 
 app_ui = ui.page_fluid(
     ui.panel_title("Measuring Sensibility of Central Tendency Measures to Outliers"),
     ui.layout_sidebar(
 
         ui.panel_sidebar(
-            ui.input_slider("n", "Sample size", 50, 10000, 1000, step=50),
+            ui.input_slider("n", "Sample size", 0, 10000, 1000, step=50),
             ui.input_slider("n_bins", "Number of bins", 0, 100, 40, step=10),
             ui.output_text_verbatim("measure_tendencies"),
             ui.input_checkbox("outliers", "Add outliers to distribution", False),
@@ -34,8 +32,6 @@ def server(input, output, session):
 
     data = reactive.Value()
     original_data = reactive.Value()
-    xlim = reactive.Value()
-    ylim = reactive.Value()
 
     @reactive.Effect
     @reactive.event(input.n)
@@ -99,7 +95,5 @@ def server(input, output, session):
         ax[2].legend()
 
         return fig
-
-session_info.show()
 
 app = App(app_ui, server)
