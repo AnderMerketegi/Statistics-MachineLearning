@@ -16,7 +16,7 @@ import numpy as np
 
 # design Shiny application
 app_ui = ui.page_fluid(
-    ui.panel_title("Measuring Sensibility of Central Tendency Measures to Outliers"),
+    ui.panel_title("Measuring Sensitivity of Central Tendency Measures to Outliers"),
     ui.layout_sidebar(
         # left side panel - parameters
         ui.panel_sidebar(
