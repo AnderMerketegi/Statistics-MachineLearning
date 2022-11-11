@@ -36,7 +36,7 @@ app_ui = ui.page_fluid(
         ),
         # right side panel - plot
         ui.panel_main(
-            ui.output_plot("plot", width = "70%", height = "850px")
+            ui.output_plot("plot", width = "60%", height = "855px")
         ),
     ),
 )
@@ -101,12 +101,16 @@ def server(input, output, session):
         fig, ax = plt.subplots(3, 1)
         ax[0].hist(data(), bins=nbins)
         ax[0].set_title("Log distribution histogram", fontsize="8")
+        ax[0].set_xlabel("Value")
+        ax[0].set_ylabel("Counts")
         # create plot to show datapoints, mean and median
         ax[1].plot(data(), '.', color="lightgray", label="Data")
         ax[1].plot([0, len(data.get())], [mean, mean], '--', color="deepskyblue", label="Mean")
         ax[1].plot([0, len(data.get())], [median, median], '-.', color="crimson", label="Median")
         ax[1].legend()
         ax[1].set_title("Log distribution datapoints", fontsize="8")
+        ax[1].set_xlabel("N")
+        ax[1].set_ylabel("Value")
         # get histogram values
         y, x = np.histogram(data(), nbins)
         # calculate the centers of the bins
@@ -120,8 +124,12 @@ def server(input, output, session):
             ax[2].set_xlim(-1, int(np.max(d)))
         else:
             ax[2].set_xlim(-1, int(mean + mean/2))
-        ax[2].set_title("Log distribution histogram, mean and median", fontsize="8")
         ax[2].legend()
+        ax[2].set_title("Log distribution histogram, mean and median", fontsize="8")
+        ax[2].set_xlabel("Value")
+        ax[2].set_ylabel("Counts")
+
+        plt.subplots_adjust(hspace=0.4)
 
         return fig
 
