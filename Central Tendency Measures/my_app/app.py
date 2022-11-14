@@ -11,8 +11,9 @@
 # import packages
 from shiny import App, reactive, render, ui
 import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
 import numpy as np
-
+import scipy.stats as stats
 
 # design Shiny application
 app_ui = ui.page_fluid(
@@ -115,10 +116,19 @@ def server(input, output, session):
         y, x = np.histogram(data(), nbins)
         # calculate the centers of the bins
         x = (x[:-1] + x[1:]) / 2
+        # get 95% confidence intervals for mean and median
+        confidence = 95
+        citmp = (1-confidence/100)/2
+        # get C.I. upper and lower bounds
+        confint = mean + stats.t.ppf([citmp, 1-citmp], len(data())-1) * np.std(data())/np.sqrt(len(data()))
         # create plot with histogram shape, mean and median
         ax[2].plot(x, y, color="gray", label="Data (Histogram)")
         ax[2].plot([mean, mean], [0, max(y)], '--', color="deepskyblue", label="Mean")
         ax[2].plot([median, median], [0, max(y)], '-.', color="crimson", label="Median")
+        # create array for C.I. polygon and add to plot
+        p_arr = np.array([ [confint[0],0], [confint[1],0], [confint[1], int((max(y) - min(y))*0.75)], [confint[0], int((max(y) - min(y))*0.75)] ])
+        p = Polygon(p_arr, facecolor="g", alpha=0.3)
+        ax[2].add_patch(p)
         # avoid changing axes if not necessary - help mean change visualization
         if mean < np.max(d):
             ax[2].set_xlim(-1, int(np.max(d)))
